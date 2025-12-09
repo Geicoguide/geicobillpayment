@@ -1,0 +1,9 @@
+/geico-bill-payment/
+│── index.html                ← your main GEICO bill payment page
+│── geico-bill-payment-help.html   ← Ads-safe clone
+│── insurance-billing-help.html    ← Hub / cluster page
+│── README.md
+│── robots.txt
+│── sitemap.xml
+│── .gitignore
+│── CNAME            (optional – if using custom domain)
