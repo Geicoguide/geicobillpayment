@@ -1,0 +1,58 @@
+# llms.txt
+# Purpose: Canonical declaration of Large Language Models (LLMs) used by the geicobillpayment project.
+# Maintainer: @Geicoguide
+# Last updated: 2025-12-09
+
+# 1) Approved models
+# Add or remove models below as your team approves them.
+# Format: model_name | provider | endpoint (optional) | allowed_purposes
+gpt-4o                   | openai       | https://api.openai.com/v1 | core assistant tasks, user-facing responses (high-confidence)
+gpt-3.5-turbo            | openai       | https://api.openai.com/v1 | background summarization, lower-risk generation
+local/llama-2-13b        | local infra  | http://llm.local:8000     | offline tasks, private data processing
+(example-model-placeholder) | provider    | endpoint                 | purpose
+
+# 2) Usage rules
+# - Use high-capability models (e.g. gpt-4 family) only for tasks requiring high accuracy.
+# - Use cheaper, lower-capability models for bulk/background tasks to reduce cost.
+# - Never send full payment card numbers, CVV, or other sensitive personal data to third-party LLMs.
+# - Sanitize and redact Personal Identifiable Information (PII) before external inference unless explicitly allowed.
+# - Always include model name and temperature in logs for reproducibility.
+
+# 3) Default settings
+# - temperature: 0.0 - 0.3 for deterministic, production-critical generation
+# - max_tokens: service-specific; prefer conservative limits (e.g. 512) unless justified
+# - top_p: 0.95 (optional)
+# - stop sequences: configure per prompt to avoid accidental leakage
+
+# 4) Example call metadata to include in code
+# model=gpt-4o; temperature=0.0; max_tokens=512; purpose="generate_payment_instructions"; request_id=<uuid>
+
+# 5) Prompt examples (production-safe patterns)
+# - Payment instruction template (system): "You are a payments assistant. Given the following sanitized invoice data, produce a concise payment instruction step-by-step. Do not include any raw card numbers or tokens."
+# - Redaction step (pre-process): "Replace any sequence that looks like a credit card, CVV, or SSN with [REDACTED] and include a note of what was redacted."
+
+# 6) Privacy & data retention
+# - If using external APIs (OpenAI, etc.), ensure API keys are stored in secrets manager and not in repo.
+# - Do not log raw user-submitted PII. Store only non-sensitive IDs and hashed/offline references.
+# - Keep model query logs for a maximum of X days (team decision) unless needed for compliance.
+
+# 7) Security & compliance
+# - External LLM usage must be approved by security lead.
+# - Any model that processes customer financial information must be declared here and in security review docs.
+# - For local models, ensure the runtime is in the VPC and audited.
+
+# 8) Testing & validation
+# - Create unit/integration tests that assert prompt outputs follow format and never include PII fields.
+# - Add model regression tests when changing models or prompts.
+
+# 9) Change log
+# - 2025-12-09: initial template added by @Geicoguide
+
+# 10) Notes / TODOs
+# - Replace example placeholders with exact approved model IDs and endpoints.
+# - Decide and document retention period X in "Privacy & data retention".
+# - Add CI check that verifies llms.txt exists and references only allowed providers.
+
+# Contact / approvals:
+# - Approver(s): (add names/teams)
+# - Security contact: (add security lead alias)
